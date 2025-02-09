@@ -52,7 +52,7 @@ function Search() {
   <div className="card-body">
   
     <h6 className="card-title">{e.title}</h6>
-    <button  onClick={()=> openNotification("top")}  className="btn btn-outline-dark  w-50 ms-auto me-auto "   > USD$ {e.price}</button>
+    <button  onClick={()=> openNotification("top")}  className="btn btn-dark ms-auto me-auto mb-3"> USD$ {e.price}</button>
    
   </div>
 </div>

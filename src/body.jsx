@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react'
 import Header from './header';
 import Carousel from 'react-bootstrap/Carousel';
 import { notification} from 'antd';
-
+import 'animate.css';
 
 
 function Body() {
   const [product, setproduct] = useState([]);
   const [api, contextHolder] = notification.useNotification();
+  console.log(product)
   const openNotification = (placement) => {
     api.info({
       message: `You bought it.`,
@@ -96,12 +97,13 @@ function Body() {
 
             return (
              
-              <div className=' text-center col-lg-4  col-md-6  ' >
+              <div className=' text-center col-lg-4 col-md-6  ' >
+         
                 <div className="card mt-5 img-fluid " >
-                  <img src={e.image} className='images m-auto mt-5' />
+                  <img src={e.image} className='images m-auto mt-5 ' />
                   <div className="card-body">
-                    <h6 className="card-title text">{e.title}</h6>
-                    <button  className="btn btn-dark   ms-auto me-auto mb-3 " onClick={()=> openNotification('top')}  >  USD$ {e.price}</button>
+                     <h6>{e.title}</h6>
+                    <button  className="btn btn-dark ms-auto me-auto mb-3 " onClick={()=> openNotification('top')}  >  USD$ {e.price}</button>
                 
 
                   </div>

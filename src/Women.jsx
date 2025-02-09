@@ -46,7 +46,7 @@ const organized = products.sort((a,b)=> a.price - b.price )
   
     <h6 className="card-title">{e.title}</h6>
     <p className="card-text"></p>
-    <button  onClick={()=> openNotification("top")}  className="btn btn-outline-dark  w-50 ms-auto me-auto "   > USD$ {e.price}</button>
+    <button  onClick={()=> openNotification("top")}  className="btn btn-dark ms-auto me-auto mb-3"> USD$ {e.price}</button>
    
   </div>
 </div>
