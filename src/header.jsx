@@ -24,7 +24,7 @@ function Header() {
 
   return (
     <>
-      <header>
+      <header className=' sticky-top'> 
         < nav style={{ height: "49px" }} className='d-md-none bg-dark sticky-top  d-flex' >
           <Offcanvas show={shows} style={{ width: "60%" }} onHide={handleCloses}>
             <Offcanvas.Header closeButton>
