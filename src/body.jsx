@@ -102,7 +102,8 @@ function Body() {
                   <img src={e.image} className='images m-auto mt-5 ' />
                   <div className="card-body">
                      <h6>{e.title}</h6>
-                    <button  className="btn btn-dark ms-auto me-auto mb-3 " onClick={()=> openNotification('top')}  >  USD$ {e.price}</button>
+                     <del  className=" text-danger  ms-auto me-auto mt-3 ">  USD$ {Number(e.price *1.2).toFixed(2)}</del>
+                    <p  className="  ms-auto me-auto mb-5 " >  USD$ {e.price}</p>
                     
                   </div>
                 </div>

@@ -24,8 +24,8 @@ function Header() {
 
   return (
     <>
-      <header>
-        < nav style={{ height: "49px" }} className='d-md-none bg-dark sticky-top  d-flex' >
+        <header className=' sticky-top'> 
+        < nav style={{ height: "49px" }} className='d-md-none bg-dark  d-flex' >
           <Offcanvas show={shows} style={{ width: "60%" }} onHide={handleCloses}>
             <Offcanvas.Header closeButton>
               <Offcanvas.Title></Offcanvas.Title>
@@ -52,14 +52,14 @@ function Header() {
           <button style={{ height: "48px" }} onClick={products} className='btn btn-dark  '>search</button>
         </nav>
 
-        <nav className=" middle navbar navbar-expand-md sticky-top bg-black  ">
-          <div className='container d-flex align-items-center  '>
+        <nav className=" middle navbar navbar-expand-md sticky-top bg-warning ">
+          <div className='container d-flex align-items-center   '>
             <ul className="collapse navbar-collapse justify-content-between p-0 m-0" id="navbarNavAltMarkup">
-              <li><a className="nav-link m-3 text-light" onClick={()=>navigate("/")}   >Home</a></li>
-              <li> <a className="nav-link m-3 text-light"onClick={()=> navigate(`/electronic`)}>Electronics</a></li>
-              <li> <a className="nav-link m-3 text-light"onClick={()=> navigate("/jewelery")} >Jewelery</a></li>
-              <li> <a className="nav-link m-3 text-light"onClick={()=> navigate("/mens clothing ")} >Men's</a></li>
-              <li><a className="nav-link m-3 text-light" onClick={()=> navigate("/mens clothing ")}>Women's</a></li>
+              <li><a className="nav-link m-3 text-dark " onClick={()=>navigate("/")}   >Home</a></li>
+              <li> <a className="nav-link m-3 text-dark"onClick={()=> navigate(`/electronic`)}>Electronics</a></li>
+              <li> <a className="nav-link m-3 text-dark"onClick={()=> navigate("/jewelery")} >Jewelery</a></li>
+              <li> <a className="nav-link m-3 text-dark"onClick={()=> navigate("/mens clothing ")} >Men's</a></li>
+              <li><a className="nav-link m-3 text-dark" onClick={()=> navigate("/womens clothing ")}>Women's</a></li>
 
               <div className='d-flex '>
                 <input onChange={(e) => setsearch(e.target.value.toLowerCase())} className='form-control' ></input>
@@ -70,7 +70,7 @@ function Header() {
           </div>
 
         </nav>
-      </header>
+        </header>
     </>
   );
 }
