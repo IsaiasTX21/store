@@ -1,21 +1,21 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
+import Carousel from 'react-bootstrap/Carousel';
 import Header from './header';
 import Spinner from 'react-bootstrap/Spinner';
 import { notification } from 'antd';
 
-function Electronic() {
+function Home() {
 
-  const [products, setproducts] = useState([]);
-  const [loading, setload] = useState(true)
+
+
   const [cart, setcart] = useState([]);
-
-
-
-
-
+  const [product, setproduct] = useState([]);
+  const [loading, setload] = useState(true)
 
   const [api, contextHolder] = notification.useNotification();
+
+
 
   const addproduct = placement => {
 
@@ -41,7 +41,6 @@ function Electronic() {
   };
 
 
-
   function addToCart(productToAdd) {
     setcart((prevCart) => {
 
@@ -50,9 +49,8 @@ function Electronic() {
       if (existingItem) {
         existproduct("top")
         return prevCart.map((item) => {
-          item.id === productToAdd.id
-          return { ...item }
 
+          return { ...item }
         }
         );
       } else {
@@ -64,26 +62,22 @@ function Electronic() {
     });
   }
 
+
   async function API() {
+
     let save = localStorage.getItem("cartsave")
     let newsave = JSON.parse(save)
-
     newsave !== null ? setcart(newsave) : setcart([])
 
     try {
-
-
-      const api = await fetch('https://fakestoreapi.com/products/category/electronics');
+      const api = await fetch('https://fakestoreapi.com/products');
       const json = await api.json();
-      setproducts(json);
+      setproduct(json);
     } catch (error) {
-      console.error("Erro ao buscar produtos de eletrônicos da API:", error);
+      console.error("Erro ao buscar produtos da API:", error);
     }
     setload(false)
   }
-
-
-  const organized = [...products].sort((a, b) => a.price - b.price);
 
   useEffect(() => {
     API();
@@ -106,17 +100,54 @@ function Electronic() {
       <Header cart={cart} setcart={setcart} />
       {contextHolder}
       <div className='container'>
-        <div className='row'>
-          {organized.map((e, i) => {
-            return (
-              <div className='text-center col-lg-4 col-md-6' key={e.id}>
-                <div className="card mt-5 img-fluid">
-                  <img src={e.image} className='mt-5 images m-auto' alt={e.title} />
-                  <div className="card-body">
-                    <h6 className="card-title">{e.title}</h6>
-                    <p className="card-text"></p>
-                    <del className="text-danger ms-auto me-auto mt-3">USD$ {Number(e.price * 1.2).toFixed(2)}</del>
+        <div className='m-auto'>
+          <Carousel slide={true} indicators={false} data-bs-theme="dark">
+            <Carousel.Item interval={2000}>
+              <img
+                className="d-block m-auto imd"
+                src="https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg"
+                alt="First slide"
+                height={"480"} />
+              <Carousel.Caption>
+              </Carousel.Caption>
+            </Carousel.Item>
 
+            <Carousel.Item interval={2000}>
+              <img
+                className="d-block m-auto imd"
+                src="https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_.jpg"
+                alt="Second slide"
+                height={"480"} />
+            </Carousel.Item>
+
+            <Carousel.Item interval={2000}>
+              <img
+                className="d-block m-auto imd"
+                src="https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg"
+                alt="Third slide"
+                height={"480"} />
+            </Carousel.Item>
+
+            <Carousel.Item interval={2000}>
+              <img
+                className="d-block m-auto imd"
+                src="https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_.jpg"
+                alt="Third slide"
+                height={"480"} />
+            </Carousel.Item>
+          </Carousel>
+        </div>
+
+        <div className='row'>
+          {product.map((e, i) => {
+            return (
+              <div className='text-center col-lg-4 col-md-6' key={e.id}> {/* Use e.id como key */}
+                <div className="card mt-5 img-fluid">
+                  <img src={e.image} className='images m-auto mt-5' alt={e.title} /> {/* Adicione alt text */}
+                  <div className="card-body">
+                    <h6>{e.title}</h6>
+                    <del className="text-danger ms-auto me-auto mt-3">USD$ {Number(e.price * 1.2).toFixed(2)}</del>
+                    {/* Chame a função addToCart com o produto 'e' */}
                     <button
                       onClick={() => addToCart(e)}
                       style={{ backgroundColor: "#17214fff" }}
@@ -135,4 +166,4 @@ function Electronic() {
   );
 }
 
-export default Electronic;
+export default Home;
