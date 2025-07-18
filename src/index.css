@@ -9,6 +9,9 @@
     height: 230px !important;
     width: 270px !important;
 }
+#break{
+word-break: keep-all !important;
+}
 
 .card-body {
     display: flex;
@@ -17,26 +20,25 @@
     height: 250px;
 }
 
-
 .carousel-indicators {
     bottom: 10px;
     color: black !important;
-
 }
 
 a {
-cursor: pointer;
+    cursor: pointer;
 }
 
 .btn-close {
     background-color: rgb(255, 255, 255) !important;
-  cursor: pointer;
-  padding: 4px;
-  position: relative;
-  font-size: 19px;
+    cursor: pointer;
+    padding: 4px;
+    position: relative;
+    font-size: 19px;
     right: 5px;
 
 }
+
 @media screen and (width < 768px) {
     .imd {
         height: 320px;
@@ -48,4 +50,14 @@ cursor: pointer;
     }
 }
 
+@media screen and (width < 400px){
 
+ #cartelement{
+flex-direction: column !important;
+height: 400px !important;
+ }
+ .cartimg{
+height: 160px;
+width: 160px;
+ }
+}

@@ -7,15 +7,10 @@ import { notification } from 'antd';
 
 function Home() {
 
-
-
   const [cart, setcart] = useState([]);
   const [product, setproduct] = useState([]);
   const [loading, setload] = useState(true)
-
   const [api, contextHolder] = notification.useNotification();
-
-
 
   const addproduct = placement => {
 
@@ -141,13 +136,13 @@ function Home() {
         <div className='row'>
           {product.map((e, i) => {
             return (
-              <div className='text-center col-lg-4 col-md-6' key={e.id}> {/* Use e.id como key */}
+              <div className='text-center col-lg-4 col-md-6' key={e.id}>
                 <div className="card mt-5 img-fluid">
-                  <img src={e.image} className='images m-auto mt-5' alt={e.title} /> {/* Adicione alt text */}
+                  <img src={e.image} className='images m-auto mt-5' alt={e.title} />
                   <div className="card-body">
                     <h6>{e.title}</h6>
                     <del className="text-danger ms-auto me-auto mt-3">USD$ {Number(e.price * 1.2).toFixed(2)}</del>
-                    {/* Chame a função addToCart com o produto 'e' */}
+
                     <button
                       onClick={() => addToCart(e)}
                       style={{ backgroundColor: "#17214fff" }}

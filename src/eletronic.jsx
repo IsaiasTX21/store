@@ -9,12 +9,6 @@ function Electronic() {
   const [products, setproducts] = useState([]);
   const [loading, setload] = useState(true)
   const [cart, setcart] = useState([]);
-
-
-
-
-
-
   const [api, contextHolder] = notification.useNotification();
 
   const addproduct = placement => {
@@ -120,8 +114,7 @@ function Electronic() {
                     <button
                       onClick={() => addToCart(e)}
                       style={{ backgroundColor: "#17214fff" }}
-                      className="btn text-white ms-auto me-auto mb-5"
-                    >
+                      className="btn text-white ms-auto me-auto mb-5">
                       Add USD$ {e.price}
                     </button>
                   </div>
