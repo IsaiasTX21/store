@@ -129,11 +129,11 @@ function Header({ cart, setcart }) {
                   placeholder='Your name'
                   
 
-                     {...register("text",{ required:true, minLength:6,pattern:/^[a-zA-Z]+$/}  )}
+                     {...register("text",{required:true})}
                     autoFocus
 
                   />
-                   {errors.text && <span className='text-danger' >It's need to have at least 6 caracteres and zero numbers </span>}
+                   {errors.text && <span className='text-danger' >Write your full name</span>}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
