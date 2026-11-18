@@ -15,7 +15,7 @@ const tileFor = (c) => ({
 
 export default async function Home() {
   const [products, collections] = await Promise.all([
-    getProducts({ first: 16 }),
+    getProducts({ first: 12 }),
     getCollections(20).catch(() => []),
   ]);
 

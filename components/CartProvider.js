@@ -8,12 +8,27 @@ import { t } from "@/lib/i18n";
 const Ctx = createContext(null);
 export const useCart = () => useContext(Ctx);
 
-export default function CartProvider({ initialCart, children }) {
+export default function CartProvider({ initialCart = null, children }) {
   const [cart, setCart] = useState(initialCart);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const busyRef = useRef(false);
+
+  // O HTML da página não carrega o carrinho (fica cacheável); ele chega logo depois, com o navegador livre
+  useEffect(() => {
+    let off = false;
+    const load = () =>
+      fetch("/api/cart", { cache: "no-store" })
+        .then((r) => r.json())
+        .then((d) => { if (!off) setCart((prev) => prev ?? d.cart ?? null); })
+        .catch(() => {});
+    const id = "requestIdleCallback" in window ? window.requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 250);
+    return () => {
+      off = true;
+      if ("cancelIdleCallback" in window) window.cancelIdleCallback(id); else clearTimeout(id);
+    };
+  }, []);
 
   // Uma operação por vez: evita cliques rápidos usarem quantidades desatualizadas
   const run = useCallback(async (fn, openAfter = false) => {

@@ -14,8 +14,16 @@ const nextConfig = {
       { source: "/politicas/:handle", destination: "/policies/:handle", permanent: true },
     ];
   },
+  poweredByHeader: false,
+  compress: true,
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com" }],
+    formats: ["image/webp"],
+    // poucos tamanhos = menos variações para gerar e guardar em cache
+    deviceSizes: [360, 414, 480, 640, 768, 1024, 1280, 1600],
+    imageSizes: [64, 96, 128, 192, 256],
+    qualities: [60, 65, 70, 75],
+    minimumCacheTTL: 2678400, // 31 dias
   },
 };
 export default nextConfig;

@@ -1,0 +1,49 @@
+{%- comment -%}
+  Cole em: Loja virtual > Temas > Editar código > layout/theme.liquid, logo depois de <head>.
+  Se já existe o bloco antigo ({%- unless request.design_mode -%} ... {%- endunless -%}), SUBSTITUA pelo bloco abaixo.
+{%- endcomment -%}
+{%- unless request.design_mode -%}
+<script>
+  (function () {
+    var site = "https://shopify2026.vercel.app"; // troque pelo endereço do seu site
+    var p = location.pathname.replace(/\/+$/, "") || "/";
+
+    // 1) Checkout pendente (o cliente veio do botão "Checkout" do site): na página inicial da loja,
+    //    clicar no nome da loja leva de volta ao checkout. Vale por 30 minutos nesta aba.
+    try {
+      var raw = sessionStorage.getItem("pendingCheckout");
+      if (raw && p === "/") {
+        var o = JSON.parse(raw);
+        if (o && o.u && Date.now() - o.t < 30 * 60 * 1000 && o.u.indexOf(location.origin + "/") === 0) {
+          location.replace(o.u);
+          return;
+        }
+        sessionStorage.removeItem("pendingCheckout");
+      }
+    } catch (e) {}
+
+    // 2) Nunca mexe em checkout, carrinho com token, pedidos, login e conta
+    if (/checkout/i.test(p) || /^\/cart\//.test(p)) return;
+    if (/^\/(orders|account|customer|authentication|\d)/.test(p)) return;
+    if (/preview_theme_id|preview_script/.test(location.search)) return;
+
+    // 3) Demais páginas da loja: vão para o mesmo caminho no site
+    var map = [
+      [/^\/products\/([^/]+)$/, "/products/$1"],
+      [/^\/collections\/all$/, "/shop"],
+      [/^\/collections\/([^/]+)$/, "/collections/$1"],
+      [/^\/pages\/([^/]+)$/, "/pages/$1"],
+      [/^\/policies\/([^/]+)$/, "/policies/$1"],
+      [/^\/cart$/, "/cart"],
+      [/^\/search$/, "/search"],
+      [/^\/$/, "/"]
+    ];
+    for (var i = 0; i < map.length; i++) {
+      if (map[i][0].test(p)) {
+        location.replace(site + p.replace(map[i][0], map[i][1]));
+        return;
+      }
+    }
+  })();
+</script>
+{%- endunless -%}

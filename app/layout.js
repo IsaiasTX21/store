@@ -1,20 +1,17 @@
 import { Barlow_Condensed, Inter } from "next/font/google";
-import { cookies } from "next/headers";
-import CartDrawer from "@/components/CartDrawer";
+import CartDrawer from "@/components/LazyDrawer";
 import CartProvider from "@/components/CartProvider";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { accountsEnabled } from "@/lib/customer";
 import { getFooter } from "@/lib/footer";
-import { readSession } from "@/lib/session";
 import { getCategories } from "@/lib/sale";
-import { getCart } from "@/lib/shopify";
 import { site } from "@/site.config";
 import { t } from "@/lib/i18n";
 import "./globals.css";
 
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
-const cond = Barlow_Condensed({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-cond" });
+const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const cond = Barlow_Condensed({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-cond", display: "swap" });
 
 export const metadata = {
   title: { default: site.name, template: `%s | ${site.name}` },
@@ -25,20 +22,17 @@ export const metadata = {
 const themeScript = `(function(){try{var d=document.documentElement,t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){var m=${JSON.stringify(site.theme.default)};if(m==="auto-time"){var h=new Date().getHours();t=(h>=${Number(site.theme.darkFrom)}||h<${Number(site.theme.darkUntil)})?"dark":"light"}else if(m==="dark"||m==="light"){t=m}else{t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}}d.dataset.theme=t}catch(e){}})();`;
 
 export default async function RootLayout({ children }) {
-  const cartId = (await cookies()).get("cartId")?.value;
-  const [cart, collections, footer, session] = await Promise.all([
-    getCart(cartId).catch(() => null),
+  // Nada aqui depende do visitante (cookies), então o HTML das páginas pode ser cacheado na CDN.
+  const [collections, footer] = await Promise.all([
     getCategories(),
     getFooter().catch(() => ({ columns: [], policies: [], hasHelp: false })),
-    readSession(),
   ]);
 
-  // Login: Customer Account API (OAuth), que devolve o cliente para ESTE site.
-  // Sem client id configurado, o ícone abre /account (que explica a configuração) e nunca o tema da Shopify.
+  // Login e carrinho são carregados no navegador (/api/session e /api/cart), logo após a página abrir.
   const account = {
-    loggedIn: session.loggedIn,
-    name: session.name,
-    href: session.loggedIn || !accountsEnabled ? "/account" : "/api/auth/login?returnTo=/account",
+    loggedIn: false,
+    name: "",
+    href: accountsEnabled ? "/api/auth/login?returnTo=/account" : "/account",
   };
 
   const sale = collections.find((c) => c.isSale);
@@ -50,7 +44,7 @@ export default async function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
-        <CartProvider initialCart={cart}>
+        <CartProvider>
           <Header
             name={site.name}
             nav={nav}

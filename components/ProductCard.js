@@ -12,14 +12,14 @@ export default function ProductCard({ product, categoryHandle }) {
   const category = categoryOf(product, categoryHandle);
 
   return (
-    <Link href={`/products/${product.handle}`} className="card">
+    <Link href={`/products/${product.handle}`} className="card" prefetch={false}>
       <div className="card-img">
         {product.featuredImage && (
           <Image
             src={product.featuredImage.url}
             alt={product.featuredImage.altText || product.title}
             fill
-            sizes="(max-width: 700px) 50vw, (max-width: 1100px) 33vw, 25vw"
+            sizes="(max-width: 700px) 50vw, (max-width: 1100px) 33vw, 25vw" quality={65}
           />
         )}
       </div>

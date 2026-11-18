@@ -17,7 +17,7 @@ export default function ProductView({ product, category, subtitle, children }) {
   const variants = product.variants.nodes;
   const images = product.images.nodes;
   const options = useMemo(() => getOptions(variants), [variants]);
-
+  // variantId -> imagem real da variante (null quando não está associada no painel)
   const resolved = useMemo(() => resolveImages(variants, images), [variants, images]);
   const hasOptions = !(variants.length === 1 && variants[0].title === "Default Title");
 
@@ -26,7 +26,8 @@ export default function ProductView({ product, category, subtitle, children }) {
   const [qty, setQty] = useState(1);
   const [activeUrl, setActiveUrl] = useState(null);
 
-
+  // A variante escolhida é SEMPRE a que combina com todas as opções selecionadas.
+  // É o id dela que vai para o carrinho.
   const variant = variants.find((v) => v.selectedOptions.every((o) => sel[o.name] === o.value)) || first;
 
   function pick(name, value, keepUrl = null) {
@@ -38,6 +39,7 @@ export default function ProductView({ product, category, subtitle, children }) {
     setActiveUrl(keepUrl);
   }
 
+  // Clicar numa imagem seleciona a cor correspondente (se for possível identificá-la)
   function onThumb(img) {
     const colorOpt = options.find((o) => isColorOption(o.name));
     const color = colorOpt ? colorOfImage(img, variants, resolved) : null;

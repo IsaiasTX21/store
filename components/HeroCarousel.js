@@ -8,10 +8,21 @@ import { t } from "@/lib/i18n";
 export default function HeroCarousel({ slides, subtitle, cta, interval = 5000 }) {
   const [i, setI] = useState(0);
   const [hover, setHover] = useState(false);
-  const [userPaused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const touchX = useRef(null);
   const count = slides.length;
+
+
+  const [ready, setReady] = useState(() => new Set([0]));
+  useEffect(() => {
+    setReady((prev) => {
+      const n = new Set(prev);
+      n.add(i);
+      n.add((i + 1) % count);
+      return n;
+    });
+  }, [i, count]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -25,7 +36,7 @@ export default function HeroCarousel({ slides, subtitle, cta, interval = 5000 })
   useEffect(() => {
     if (!playing) return;
     const t = setInterval(() => setI((n) => (n + 1) % count), interval);
-    return () => clearInterval(t);
+    return () => clearInterval(t); 
   }, [playing, count, interval, i]);
 
   const go = (n) => setI(((n % count) + count) % count);
@@ -60,7 +71,7 @@ export default function HeroCarousel({ slides, subtitle, cta, interval = 5000 })
             aria-label={t("hero.group", { i: k + 1, n: count })}
             aria-hidden={!active}
           >
-            {s.image && <Image src={s.image.url} alt="" fill priority={k === 0} sizes="100vw" />}
+            {s.image && ready.has(k) && <Image src={s.image.url} alt="" fill priority={k === 0} quality={60} sizes="(max-width: 700px) calc(100vw - 2rem), (max-width: 1500px) calc(100vw - 6rem), 1500px" />}
             <div className="hero-copy">
               <h2 className="cap">{s.title}</h2>
               {subtitle && <p>{subtitle}</p>}
@@ -79,7 +90,6 @@ export default function HeroCarousel({ slides, subtitle, cta, interval = 5000 })
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
           </button>
           <div className="hero-ui">
-       
             <div className="hero-dots">
               {slides.map((s, k) => (
                 <button key={s.href} className={k === i ? "is-on" : ""} aria-label={t("hero.goto", { name: s.title })} aria-current={k === i} onClick={() => go(k)} />

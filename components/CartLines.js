@@ -15,7 +15,8 @@ export default function CartLines({ onNavigate }) {
       {lines.map((line) => {
         const v = line.merchandise;
         const hasColor = !!colorOf(v);
-  
+        // Foto real da variante. Se for um produto com cores e a foto da cor não está
+        // associada no painel, mostramos a cor em vez da foto errada.
         const img = line.resolvedImage || (!hasColor ? v.product.featuredImage : null);
         const opts = v.title === "Default Title" ? [] : v.selectedOptions;
         return (

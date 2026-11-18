@@ -165,3 +165,9 @@ Passo a passo em `shopify-theme/LEIA-ME.md`.
 - Home: faixa fina, capa em carrossel por coleção, "Shop by category" (cartões das coleções), "All products" (produtos da Shopify) e links de categorias.
 - As fotos de produto têm fundo branco, então ficam numa moldura clara dentro do cartão de vidro. Fotos sem fundo (PNG transparente) ficam ainda melhores.
 - Nada de integração mudou: produtos, coleções, variantes, carrinho, login, pedidos, filtros e categoria Sale continuam iguais.
+
+## Desempenho (otimizações)
+- **HTML cacheável:** o layout não lê mais cookies. Login e carrinho são carregados no navegador (`/api/session` e `/api/cart`) com o navegador livre, então as páginas (home, produtos, categorias) podem ser servidas pela CDN em vez de renderizadas a cada visita.
+- **Imagens:** a capa só baixa o slide atual e o próximo; qualidade 60-65 e `sizes` corretos; poucos tamanhos em `next.config.mjs` e cache de 31 dias; links de cartões sem pré-carregamento automático.
+- **CSS:** desfoque (`backdrop-filter`) só no cabeçalho, capa e gaveta no desktop; **no celular** sem desfoque, sem brilhos, sem animações de entrada e fundo simples (sem estrelas). `content-visibility` nas listas e seções.
+- **JavaScript:** a gaveta do carrinho é carregada sob demanda; consulta de "Sale" no menu usa uma consulta mínima.

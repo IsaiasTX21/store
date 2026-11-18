@@ -2,15 +2,31 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useCart } from "./CartProvider";
 import ThemeToggle from "./ThemeToggle";
 import { plural, t } from "@/lib/i18n";
 
-export default function Header({ name, nav, account, helpHref, announcement }) {
+export default function Header({ name, nav, account: initialAccount, helpHref, announcement }) {
   const { count, openCart } = useCart();
   const router = useRouter();
   const [q, setQ] = useState("");
+
+  const [account, setAccount] = useState(initialAccount);
+  useEffect(() => {
+    let off = false;
+    const load = () =>
+      fetch("/api/session", { cache: "no-store" })
+        .then((r) => r.json())
+        .then((d) => { if (!off) setAccount(d); })
+        .catch(() => {});
+    const id = "requestIdleCallback" in window ? window.requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 250);
+    return () => {
+      off = true;
+      if ("cancelIdleCallback" in window) window.cancelIdleCallback(id); else clearTimeout(id);
+    };
+  }, []);
+
   const headerRef = useRef(null);
   const brandRef = useRef(null);
   const navRef = useRef(null);
@@ -65,11 +81,11 @@ export default function Header({ name, nav, account, helpHref, announcement }) {
         <Link href="/" className="brand" ref={brandRef}>Luxury store</Link>
 
         <nav className="nav" ref={navRef} aria-label={t("nav.main")}>
-         <Link href="/shop">{t("nav.all")}</Link>
+             <Link href="/shop">{t("nav.all")}</Link>
           {nav.map((c) => (
             <Link key={c.handle} href={c.href || `/collections/${c.handle}`} className={`cap ${c.isSale ? "is-sale" : ""}`}>{c.title}</Link>
           ))}
-    
+         
         </nav>
 
         <div className="header-actions">
@@ -81,6 +97,7 @@ export default function Header({ name, nav, account, helpHref, announcement }) {
           <div className="header-icons" ref={iconsRef}>
           <ThemeToggle />
 
+          
           <a className={`icon-btn ${account.loggedIn ? "is-on" : ""}`} href={account.href} aria-label={accountLabel} title={accountLabel}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
               <circle cx="12" cy="8" r="4" /><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6" />

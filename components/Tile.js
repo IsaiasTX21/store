@@ -5,13 +5,13 @@ import { t } from "@/lib/i18n";
 // size: "large" (título + botão), "tall" (apenas rótulo em pílula)
 export default function Tile({ href, title, subtitle, image, size = "large", cta = t("common.shop") }) {
   return (
-    <Link href={href} className={`tile tile-${size}`}>
+    <Link href={href} className={`tile tile-${size}`} prefetch={false}>
       {image && (
         <Image
           src={image.url}
           alt={image.altText || ""}
           fill
-          sizes={size === "large" ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 700px) 100vw, 400px"}
+          sizes={size === "large" ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 560px) 64vw, (max-width: 700px) 100vw, 400px"} quality={65}
         />
       )}
       <div className="tile-copy">
